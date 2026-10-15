@@ -1,0 +1,32 @@
+# Lance toute l'application : docker compose up --build
+# Puis ouvrir http://localhost:8080
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.19.1
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant-data:/qdrant/storage
+
+  backend:
+    build: ./backend
+    env_file: .env
+    environment:
+      QDRANT_URL: http://qdrant:6333
+    ports:
+      - "8000:8000"
+    volumes:
+      - hf-cache:/root/.cache/huggingface  # le modèle d'embeddings n'est téléchargé qu'une fois
+    depends_on:
+      - qdrant
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  qdrant-data:
+  hf-cache:

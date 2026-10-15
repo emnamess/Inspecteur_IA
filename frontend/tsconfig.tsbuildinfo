@@ -1,1 +1,0 @@
-{"root":["./src/app.tsx","./src/api.ts","./src/main.tsx","./src/types.ts","./src/components/accusedialog.tsx","./src/components/interrogation.tsx","./src/components/manormap.tsx","./src/components/notebook.tsx","./src/components/panel.tsx","./src/components/startscreen.tsx","./src/components/verdictscreen.tsx","./vite.config.ts"],"version":"5.8.3"}

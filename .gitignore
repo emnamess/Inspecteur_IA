@@ -3,3 +3,9 @@
 __pycache__/
 # Scénarios générés par le Maître du jeu (cache local)
 backend/scenarios/generated/
+
+# Résultats bruts de l'évaluation (le résumé results.md, lui, est versionné)
+eval/results.json
+
+# Fichiers générés par TypeScript
+*.tsbuildinfo

@@ -119,8 +119,8 @@ Les résultats vont dans le README. C'est la partie la plus convaincante pour le
 
 ## 8. Stack technique
 
-* **Back :** Python 3.11+, SDK MCP officiel (`mcp`, FastMCP), FastAPI, LangGraph / LangChain, Pydantic, pytest
-* **IA :** une API LLM (au choix), Qdrant pour la mémoire vectorielle
+* **Back :** Python 3.11+, SDK MCP officiel v2 (`mcp`, classe `MCPServer`, ex-FastMCP), FastAPI, LangGraph, Pydantic, pytest
+* **IA :** Claude (SDK officiel `anthropic`), Qdrant pour la mémoire vectorielle, embeddings `model2vec`
 * **Front :** React + TypeScript + Vite + Tailwind CSS
 * **Infra :** Docker, docker-compose (back + front + Qdrant), GitHub Actions (lint + tests)
 
