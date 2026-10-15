@@ -9,8 +9,8 @@ from typing import Any
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 
-from game import Game, GameError, load_scenario
-from game.engine import AlibiInterrogator
+from game import Game, GameError
+from game_factory import new_game
 
 mcp = MCPServer(
     "Inspecteur IA",
@@ -46,7 +46,7 @@ def start_game(seed: int | None = None) -> dict[str, Any]:
         seed: optionnel. Absent : scénario écrit à la main.
     """
     global _current_game
-    _current_game = Game(scenario=load_scenario(), interrogator=AlibiInterrogator())
+    _current_game = new_game(seed)
     return _current_game.start_info()
 
 
