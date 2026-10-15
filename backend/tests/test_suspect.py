@@ -45,3 +45,43 @@ def test_game_passes_history_to_the_agent():
     game.interrogate("jardinier", "Question 1")
     game.interrogate("jardinier", "Question 2")
     assert len(llm.calls[1]["messages"]) == 3  # question 1, réponse 1, question 2
+
+
+def _agent_with_memory(llm):
+    from qdrant_client import QdrantClient
+
+    from memory import SuspectMemory
+    from memory.embeddings import HashingEmbedder
+
+    memory = SuspectMemory(client=QdrantClient(":memory:"), embedder=HashingEmbedder())
+    memory.index_scenario("g", scenario)
+    return SuspectAgent(llm, memory=memory, game_id="g"), memory
+
+
+def test_agent_with_memory_injects_relevant_memories_and_stores_answer():
+    llm = FakeLLM(texts=["Oui, à 21h50."])
+    agent, memory = _agent_with_memory(llm)
+    agent.answer(scenario, scenario.suspect("majordome"), "Avez-vous servi du whisky au comte ?", [])
+
+    system = llm.calls[0]["system"]
+    assert "Tes souvenirs utiles" in system
+    assert "whisky au comte dans la bibliothèque" in system
+    statements = [
+        m for m in memory.recall("g", "majordome", "whisky 21h50", limit=20) if m.kind == "statement"
+    ]
+    assert len(statements) == 1
+
+
+def test_agent_with_memory_keeps_only_recent_history_in_messages():
+    llm = FakeLLM()
+    agent, _ = _agent_with_memory(llm)
+    history = [Exchange(f"Question {i}", f"Réponse {i}") for i in range(10)]
+    agent.answer(scenario, scenario.suspect("jardinier"), "Encore une question", history)
+    assert len(llm.calls[0]["messages"]) == 2 * 4 + 1
+
+
+def test_feedback_is_added_to_the_prompt():
+    llm = FakeLLM()
+    agent = SuspectAgent(llm)
+    agent.generate(scenario, scenario.suspect("niece"), "Avouez !", [], feedback=["Tu as avoué le crime."])
+    assert "Tu as avoué le crime." in llm.calls[0]["system"]

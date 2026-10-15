@@ -5,6 +5,7 @@ FastAPI ne font qu'appeler ces méthodes. Les réponses des suspects sont
 déléguées à un `Interrogator` injecté, ce qui garde le moteur indépendant du LLM.
 """
 
+import uuid
 from dataclasses import dataclass, field
 from typing import Protocol
 
@@ -46,6 +47,7 @@ class AlibiInterrogator:
 class Game:
     scenario: Scenario
     interrogator: Interrogator
+    id: str = field(default_factory=lambda: uuid.uuid4().hex)
     discovered_clues: dict[str, str] = field(default_factory=dict)  # id de l'indice -> id de la pièce
     visited_rooms: list[str] = field(default_factory=list)
     histories: dict[str, list[Exchange]] = field(default_factory=dict)
@@ -58,6 +60,7 @@ class Game:
     def start_info(self) -> dict:
         victim = self.scenario.victim
         return {
+            "game_id": self.id,
             "title": self.scenario.title,
             "intro": self.scenario.intro,
             "victim": {

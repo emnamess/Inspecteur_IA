@@ -8,6 +8,12 @@ pour que le suspect reste cohérent avec ce qu'il a déjà dit.
 from agents.llm import LLM
 from game import Answer, Exchange, Scenario
 from game.models import Suspect
+from memory import SuspectMemory
+
+# Mémoire courte : les derniers échanges sont passés tels quels au LLM.
+# Mémoire longue : tout le reste est retrouvé dans Qdrant (RAG) selon la question.
+RECENT_EXCHANGES = 4
+MEMORIES_PER_QUESTION = 6
 
 
 def _bullets(items: list[str]) -> str:
@@ -66,12 +72,45 @@ def build_messages(history: list[Exchange], question: str) -> list[dict]:
 
 
 class SuspectAgent:
-    """Implémente l'interface `Interrogator` du moteur de jeu avec un LLM."""
+    """Implémente l'interface `Interrogator` du moteur de jeu avec un LLM.
 
-    def __init__(self, llm: LLM):
+    Avec une mémoire Qdrant, le prompt ne contient que les souvenirs pertinents pour
+    la question, et chaque réponse est mémorisée pour rester cohérente plus tard.
+    """
+
+    def __init__(self, llm: LLM, memory: SuspectMemory | None = None, game_id: str | None = None):
         self.llm = llm
+        self.memory = memory
+        self.game_id = game_id
 
     def answer(self, scenario: Scenario, suspect: Suspect, question: str, history: list[Exchange]) -> Answer:
-        system = build_system_prompt(scenario, suspect)
-        text = self.llm.generate(system, build_messages(history, question), effort="low")
+        text = self.generate(scenario, suspect, question, history)
+        self.remember(suspect, question, text)
         return Answer(text=text)
+
+    def generate(
+        self,
+        scenario: Scenario,
+        suspect: Suspect,
+        question: str,
+        history: list[Exchange],
+        feedback: list[str] | None = None,
+    ) -> str:
+        memories = None
+        if self.memory is not None:
+            found = self.memory.recall(self.game_id, suspect.id, question, limit=MEMORIES_PER_QUESTION)
+            memories = [memory.as_prompt_line() for memory in found]
+            history = history[-RECENT_EXCHANGES:]
+
+        system = build_system_prompt(scenario, suspect, memories)
+        if feedback:
+            system += (
+                "\n\nATTENTION : ta réponse précédente à cette question a été rejetée pour ces raisons :\n"
+                + _bullets(feedback)
+                + "\nRéponds de nouveau en corrigeant ces problèmes."
+            )
+        return self.llm.generate(system, build_messages(history, question), effort="low")
+
+    def remember(self, suspect: Suspect, question: str, answer: str) -> None:
+        if self.memory is not None:
+            self.memory.remember_statement(self.game_id, suspect.id, question, answer)
