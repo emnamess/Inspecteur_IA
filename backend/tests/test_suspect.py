@@ -41,7 +41,7 @@ def test_suspect_agent_answers_with_llm():
 
 def test_game_passes_history_to_the_agent():
     llm = FakeLLM(texts=["Réponse 1", "Réponse 2"])
-    game = new_game(llm=llm)
+    game = new_game(llm=llm, verify=False)
     game.interrogate("jardinier", "Question 1")
     game.interrogate("jardinier", "Question 2")
     assert len(llm.calls[1]["messages"]) == 3  # question 1, réponse 1, question 2

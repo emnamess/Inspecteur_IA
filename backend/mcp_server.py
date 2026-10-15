@@ -10,7 +10,7 @@ from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 
 from game import Game, GameError
-from game_factory import new_game
+from game_factory import new_game, shared_memory
 
 mcp = MCPServer(
     "Inspecteur IA",
@@ -43,9 +43,12 @@ def start_game(seed: int | None = None) -> dict[str, Any]:
     À appeler en premier. Relancer l'outil abandonne la partie en cours.
 
     Args:
-        seed: optionnel. Absent : scénario écrit à la main.
+        seed: optionnel. Absent : le scénario écrit à la main. Un nombre : un nouveau scénario
+            généré par le Maître du jeu (le même nombre redonne le même scénario).
     """
     global _current_game
+    if _current_game is not None:
+        shared_memory().forget_game(_current_game.id)
     _current_game = new_game(seed)
     return _current_game.start_info()
 
