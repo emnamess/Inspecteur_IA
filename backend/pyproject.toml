@@ -1,0 +1,16 @@
+[project]
+name = "inspecteur-ia"
+version = "0.1.0"
+description = "Jeu d'enquête où chaque suspect est un agent IA, exposé par un serveur MCP"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

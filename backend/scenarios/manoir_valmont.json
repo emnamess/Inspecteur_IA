@@ -1,0 +1,210 @@
+{
+  "title": "Meurtre au manoir de Valmont",
+  "intro": "Samedi soir, 22h40. Un orage gronde sur le manoir de Valmont. Le comte Édouard de Valmont vient d'être retrouvé mort dans sa bibliothèque. Les routes sont coupées : le coupable est forcément encore dans la maison. Vous êtes l'inspecteur chargé de l'enquête.",
+  "victim": {
+    "name": "Comte Édouard de Valmont",
+    "cause_of_death": "Empoisonnement à l'arsenic",
+    "time": "22:30",
+    "location": "bibliotheque"
+  },
+  "rooms": [
+    {
+      "id": "bibliotheque",
+      "name": "Bibliothèque",
+      "description": "Une pièce sombre aux murs couverts de livres. Le comte gît près de son fauteuil en cuir. Sur le bureau, une carafe de whisky ; au sol, les éclats d'un verre.",
+      "clues": ["verre_brise", "carafe_whisky"]
+    },
+    {
+      "id": "salon",
+      "name": "Grand salon",
+      "description": "Un salon luxueux où les invités ont pris le café après le dîner. Le feu de la cheminée achève de se consumer. La porte-fenêtre donne sur la terrasse.",
+      "clues": ["lettre_brulee"]
+    },
+    {
+      "id": "cuisine",
+      "name": "Cuisine",
+      "description": "Une grande cuisine encore tiède. La vaisselle du dîner sèche sur l'égouttoir. Un escalier de service mène à la cave.",
+      "clues": ["registre_cave"]
+    },
+    {
+      "id": "remise",
+      "name": "Remise du jardin",
+      "description": "Une cabane en bois au fond du parc, qui sent la terre humide. Des outils pendent aux murs. La porte n'a pas de serrure.",
+      "clues": ["boite_mort_aux_rats", "empreintes_boue"]
+    },
+    {
+      "id": "chambre_clara",
+      "name": "Chambre de Clara",
+      "description": "Une chambre élégante au premier étage. Un roman est ouvert sur la table de nuit, mais le lit n'a pas été défait.",
+      "clues": ["bottines_boueuses", "reconnaissances_dettes"]
+    }
+  ],
+  "suspects": [
+    {
+      "id": "majordome",
+      "name": "Albert Fontaine",
+      "role": "Majordome",
+      "description": "Au service des Valmont depuis vingt ans. Il a servi le dîner et le café.",
+      "personality": "Nerveux, très poli, s'exprime avec déférence et un vocabulaire soutenu. Il transpire quand on parle de la cave.",
+      "alibi": "J'étais en cuisine à ranger le dîner de 21h45 à 22h45, sauf un court moment vers 22h10 où j'ai porté le café au salon.",
+      "secrets": [
+        "Depuis des mois, il revend en cachette des bouteilles de la cave du comte pour aider sa sœur malade."
+      ],
+      "knows": [
+        "À 21h50, il a servi un verre de whisky au comte dans la bibliothèque, à partir de la carafe ; le comte allait très bien.",
+        "Vers 22h10, il a porté le café au salon et l'a trouvé vide.",
+        "Vers 22h10, en revenant du salon, il a croisé Clara dans le couloir qui mène à la bibliothèque. Elle a sursauté en le voyant.",
+        "Le comte avait demandé ce matin à Clara de venir le voir pour « une discussion sérieuse ».",
+        "Le jardinier a été renvoyé ce matin par le comte."
+      ],
+      "lies": [
+        "Il peut nier avoir pris des bouteilles dans la cave ou affirmer que le registre de la cave est exact."
+      ],
+      "is_guilty": false
+    },
+    {
+      "id": "niece",
+      "name": "Clara de Valmont",
+      "role": "Nièce du comte",
+      "description": "Nièce et unique héritière du comte. Arrivée de Paris la veille.",
+      "personality": "Charmante, sûre d'elle, un brin hautaine. Elle garde son calme et retourne volontiers les questions contre l'inspecteur.",
+      "alibi": "J'étais dans ma chambre à lire de 22h00 jusqu'à ce qu'on crie dans la maison.",
+      "secrets": [
+        "Elle a accumulé de très lourdes dettes de jeu à Paris.",
+        "Le comte lui a annoncé ce soir qu'il allait la retirer de son testament.",
+        "Vers 21h30, elle est allée à la remise prendre de la mort-aux-rats.",
+        "Vers 22h05, elle a versé l'arsenic dans la carafe de whisky de la bibliothèque.",
+        "Vers 22h15, elle a brûlé dans la cheminée du salon la lettre du comte destinée au notaire."
+      ],
+      "knows": [
+        "Le comte voulait la retirer de son testament.",
+        "La mort-aux-rats est rangée dans la remise du jardin, qui ne ferme pas à clé.",
+        "Le comte boit toujours un dernier whisky avant de se coucher.",
+        "Le jardinier a été renvoyé ce matin par le comte."
+      ],
+      "lies": [
+        "Elle prétend être restée dans sa chambre de 22h00 à 22h40.",
+        "Elle nie être sortie dans le parc ou être allée à la remise.",
+        "Elle nie être entrée dans la bibliothèque ou dans le salon après le dîner.",
+        "Elle prétend ignorer que le comte voulait modifier son testament.",
+        "Elle nie avoir des dettes."
+      ],
+      "is_guilty": true
+    },
+    {
+      "id": "jardinier",
+      "name": "Lucien Morel",
+      "role": "Jardinier",
+      "description": "Jardinier du domaine. Le comte l'a renvoyé ce matin même.",
+      "personality": "Bourru, taciturne, répond par phrases courtes. Méfiant envers la police et rancunier envers le comte.",
+      "alibi": "J'étais dans mon pavillon au fond du parc toute la soirée, à partir de 21h00.",
+      "secrets": [
+        "Il n'était pas dans son pavillon : il braconnait dans les bois du domaine entre 21h00 et 23h00."
+      ],
+      "knows": [
+        "Le comte l'a renvoyé ce matin, en l'accusant d'avoir abîmé les rosiers.",
+        "La boîte de mort-aux-rats de la remise était pleine hier après-midi.",
+        "La remise ne ferme pas à clé.",
+        "Vers 21h30, depuis la lisière du bois, il a vu une silhouette avec une lanterne entrer dans la remise. Il n'a pas reconnu la personne, mais elle était menue et portait une robe."
+      ],
+      "lies": [
+        "Il prétend avoir passé toute la soirée dans son pavillon."
+      ],
+      "is_guilty": false
+    },
+    {
+      "id": "medecin",
+      "name": "Dr Henri Vasseur",
+      "role": "Médecin de famille",
+      "description": "Médecin et vieil ami du comte, invité pour le week-end. C'est lui qui a constaté le décès.",
+      "personality": "Posé, précis, un peu condescendant. Il aime employer des termes médicaux.",
+      "alibi": "J'étais au salon jusqu'à 22h00, puis j'ai fumé un cigare seul sur la terrasse jusqu'à 22h25.",
+      "secrets": [
+        "Il doit une grosse somme d'argent au comte et ne peut pas la rembourser."
+      ],
+      "knows": [
+        "Vers 21h30, par la fenêtre du salon, il a vu une lumière de lanterne se diriger vers la remise.",
+        "Vers 22h30, il a entendu un cri venant de la bibliothèque et a accouru.",
+        "Le comte présentait des vomissements et une odeur d'ail : des signes typiques d'un empoisonnement à l'arsenic.",
+        "Selon lui, le décès est survenu vers 22h30, peu de temps après l'ingestion du poison.",
+        "Clara a quitté le salon vers 21h20 en disant qu'elle allait se coucher."
+      ],
+      "lies": [
+        "Il peut nier devoir de l'argent au comte."
+      ],
+      "is_guilty": false
+    }
+  ],
+  "clues": [
+    {
+      "id": "verre_brise",
+      "name": "Verre brisé",
+      "description": "Les éclats d'un verre de whisky. Une odeur d'ail s'en dégage encore.",
+      "points_to": "Le poison était dans le whisky. L'odeur d'ail évoque l'arsenic."
+    },
+    {
+      "id": "carafe_whisky",
+      "name": "Carafe de whisky",
+      "description": "Une carafe à moitié vide. Un dépôt blanchâtre tapisse le fond.",
+      "points_to": "Le poison a été versé dans la carafe elle-même, donc après le dernier service du majordome."
+    },
+    {
+      "id": "lettre_brulee",
+      "name": "Lettre à moitié brûlée",
+      "description": "Dans les cendres de la cheminée, un fragment lisible : « ...Maître Lambert, je souhaite retirer ma nièce Clara de mon testament... »",
+      "points_to": "Clara avait un mobile : elle allait perdre l'héritage. Quelqu'un a voulu faire disparaître cette lettre."
+    },
+    {
+      "id": "registre_cave",
+      "name": "Registre de la cave",
+      "description": "Le registre tenu par le majordome. Plusieurs bouteilles de grands crus manquent par rapport à l'inventaire.",
+      "points_to": "Le majordome cache quelque chose, mais cela concerne la cave, pas forcément le meurtre."
+    },
+    {
+      "id": "boite_mort_aux_rats",
+      "name": "Boîte de mort-aux-rats",
+      "description": "Une boîte de mort-aux-rats à base d'arsenic, ouverte et à moitié vide.",
+      "points_to": "La source du poison. La remise n'étant pas fermée, n'importe qui a pu s'en servir."
+    },
+    {
+      "id": "empreintes_boue",
+      "name": "Empreintes dans la boue",
+      "description": "Devant la remise, des empreintes de petites chaussures à talon, fraîches.",
+      "points_to": "Une personne aux pieds menus, sans doute une femme, est venue à la remise ce soir."
+    },
+    {
+      "id": "bottines_boueuses",
+      "name": "Bottines boueuses",
+      "description": "Une paire de bottines à talon, couvertes de boue encore humide, cachée sous le lit.",
+      "points_to": "Clara est sortie dans le parc ce soir, contrairement à ce qu'elle affirme."
+    },
+    {
+      "id": "reconnaissances_dettes",
+      "name": "Reconnaissances de dettes",
+      "description": "Une liasse de reconnaissances de dettes signées par Clara, au nom d'un cercle de jeu parisien.",
+      "points_to": "Clara a un besoin urgent d'argent."
+    }
+  ],
+  "timeline": [
+    {"time": "Matin", "event": "Le comte renvoie le jardinier et demande à Clara de venir le voir pour une discussion sérieuse."},
+    {"time": "20:00", "event": "Dîner au manoir avec le comte, Clara et le Dr Vasseur, servi par le majordome."},
+    {"time": "21:00", "event": "Le jardinier part braconner dans les bois du domaine (il prétendra être resté dans son pavillon)."},
+    {"time": "21:15", "event": "Le comte annonce à Clara qu'il va la retirer de son testament ; il a déjà écrit une lettre au notaire."},
+    {"time": "21:20", "event": "Clara quitte le salon en disant qu'elle va se coucher."},
+    {"time": "21:30", "event": "Clara se rend à la remise avec une lanterne et prend de la mort-aux-rats. Le jardinier et le médecin aperçoivent la lanterne."},
+    {"time": "21:45", "event": "Le majordome commence à ranger la cuisine."},
+    {"time": "21:50", "event": "Le majordome sert un verre de whisky au comte dans la bibliothèque. Le comte va bien."},
+    {"time": "22:00", "event": "Le médecin sort fumer un cigare sur la terrasse. Le comte quitte un moment la bibliothèque."},
+    {"time": "22:05", "event": "Clara verse l'arsenic dans la carafe de whisky de la bibliothèque."},
+    {"time": "22:10", "event": "Le majordome porte le café au salon (vide) et croise Clara dans le couloir de la bibliothèque."},
+    {"time": "22:15", "event": "Clara brûle la lettre au notaire dans la cheminée du salon, puis remonte dans sa chambre et cache ses bottines."},
+    {"time": "22:20", "event": "Le comte revient et se sert un whisky empoisonné."},
+    {"time": "22:30", "event": "Le comte meurt. Le médecin entend un cri et accourt."},
+    {"time": "22:40", "event": "Toute la maison est réunie ; l'inspecteur est appelé."}
+  ],
+  "solution": {
+    "guilty": "niece",
+    "motive": "Criblée de dettes de jeu, Clara avait besoin de l'héritage ; or le comte venait de lui annoncer qu'il la retirait de son testament.",
+    "method": "Elle a pris de la mort-aux-rats (arsenic) dans la remise vers 21h30, l'a versée dans la carafe de whisky de la bibliothèque vers 22h05, puis a brûlé la lettre destinée au notaire dans la cheminée du salon."
+  }
+}
