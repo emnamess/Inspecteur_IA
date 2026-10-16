@@ -91,6 +91,8 @@ npm install
 npm run dev                     # http://localhost:5173
 ```
 
+Raccourci (Windows) : `npm start` dans `frontend/` lance l'API **et** le front en une seule commande.
+
 ### Tout en Docker
 
 ```bash

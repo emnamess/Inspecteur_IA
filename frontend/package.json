@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "start": "concurrently --kill-others -n api,web -c yellow,cyan \"npm:api\" \"npm:dev\"",
+    "api": "cd ../backend && .venv\\Scripts\\python -m uvicorn api:app --reload",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
@@ -17,6 +19,7 @@
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
     "@vitejs/plugin-react": "4.5.2",
+    "concurrently": "9.1.2",
     "tailwindcss": "4.1.10",
     "typescript": "5.8.3",
     "vite": "6.3.5"
