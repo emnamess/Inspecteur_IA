@@ -7,7 +7,7 @@ import uuid
 
 from agents.game_master import GameMaster, generated_scenario
 from agents.graph import InterrogationGraph
-from agents.llm import LLM, ClaudeLLM
+from agents.llm import LLM, default_llm
 from agents.suspect import SuspectAgent
 from agents.verifier import Verifier
 from game import Game, load_scenario
@@ -34,14 +34,15 @@ def new_game(
 
     `verify=False` désactive le Vérificateur (utile pour mesurer son apport dans l'évaluation).
     """
-    llm = llm or ClaudeLLM()
     memory = memory or shared_memory()
 
     if seed is None:
         scenario = load_scenario()
     else:
-        game_master_llm = llm if not isinstance(llm, ClaudeLLM) else ClaudeLLM(llm.model, max_tokens=16000)
+        game_master_llm = llm or default_llm(max_tokens=16000)  # un scénario complet est long
         scenario = generated_scenario(seed, GameMaster(game_master_llm))
+
+    llm = llm or default_llm()
 
     game_id = uuid.uuid4().hex
     memory.index_scenario(game_id, scenario)

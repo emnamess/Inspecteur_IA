@@ -35,7 +35,11 @@ export function Interrogation({ suspects, activeId, conversation, waiting, onSel
   const endRef = useRef<HTMLDivElement>(null);
   const active = suspects.find((s) => s.id === activeId)!;
 
-  useEffect(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), [conversation.length, waiting]);
+  // Accolades obligatoires : un effet ne doit rien renvoyer (scrollIntoView renvoie une Promise
+  // dans les navigateurs récents, que React prendrait pour une fonction de nettoyage).
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [conversation.length, waiting]);
 
   function submit(event: React.FormEvent) {
     event.preventDefault();

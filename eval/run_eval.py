@@ -9,7 +9,7 @@ Mesures : taux de contradictions, nombre de fuites de la solution, temps de rép
 
 Usage (depuis la racine du dépôt, environnement du backend activé) :
     python eval/run_eval.py --games 20
-    python eval/run_eval.py --games 3 --model claude-haiku-5-5    # essai rapide et peu coûteux
+    python eval/run_eval.py --games 3 --workers 1    # essai rapide, 1 partie à la fois (quota gratuit)
 """
 
 import argparse
@@ -25,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
 
 from qdrant_client import QdrantClient  # noqa: E402
 
-from agents.llm import ClaudeLLM  # noqa: E402
+from agents.llm import default_llm  # noqa: E402
 from agents.verifier import Verdict, Verifier  # noqa: E402
 from game_factory import new_game  # noqa: E402
 from memory import SuspectMemory  # noqa: E402
@@ -151,21 +151,27 @@ def main() -> None:
     parser.add_argument("--games", type=int, default=20, help="parties par mode (défaut : 20)")
     parser.add_argument("--model", default=None, help="modèle des agents (défaut : LLM_MODEL)")
     parser.add_argument("--judge-model", default=None, help="modèle du juge (défaut : le même)")
-    parser.add_argument("--workers", type=int, default=4, help="parties jouées en parallèle")
+    parser.add_argument(
+        "--workers", type=int, default=4, help="parties en parallèle (1 conseillé avec Gemini gratuit)"
+    )
     parser.add_argument("--dry-run", action="store_true", help="sans appel API, pour tester le script")
     args = parser.parse_args()
 
     if args.dry_run:
         llm, judge, embedder = OfflineLLM(), Verifier(OfflineLLM()), HashingEmbedder()
     else:
-        llm = ClaudeLLM(args.model)
-        judge = Verifier(ClaudeLLM(args.judge_model or llm.model))
+        llm = default_llm(args.model)
+        judge = Verifier(default_llm(args.judge_model or llm.model))
         embedder = default_embedder()
         embedder.embed(["chargement"])  # charge le modèle une seule fois, avant les threads
 
     calls = args.games * 2 * len(QUESTIONS)
     print(f"{args.games} parties × 2 modes × {len(QUESTIONS)} questions = {calls} réponses à juger.")
-    print(f"Modèle : {llm.model}." + ("" if args.dry_run else " Cela consomme des crédits API.") + "\n")
+    print(
+        f"Modèle : {llm.model}."
+        + ("" if args.dry_run else " Appels réels à l'API du LLM (quota ou crédits).")
+        + "\n"
+    )
 
     jobs = [(i, verify) for verify in (False, True) for i in range(args.games)]
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
